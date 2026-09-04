@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Login - {{ app_name }}{% endblock %}
+{% block content %}
+<div class="login-wrap">
+  <div class="login-card">
+    <div class="brand-dot mb-3" style="width:44px;height:44px;font-size:1.1rem;"></div>
+    <h4 class="fw-bold mb-1">{{ app_name }}</h4>
+    <p class="text-muted mb-4">Sign in to continue</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} py-2">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" novalidate>
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" required autofocus>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" required>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+    <p class="text-muted small mt-3 mb-0">Works fully offline on the college LAN.</p>
+  </div>
+</div>
+{% endblock %}

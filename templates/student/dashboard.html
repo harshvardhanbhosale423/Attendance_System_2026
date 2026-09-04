@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}My Dashboard{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-1">Welcome, {{ student.full_name }}</h4>
+<p class="text-muted mb-4">{{ student.student_code }} · Roll {{ student.roll_number }} · {{ student.division.class_group.name }}-{{ student.division.name }}</p>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="stat-card">
+      <div class="stat-value">{{ overall_pct }}%</div>
+      <div class="stat-label">Overall Attendance ({{ present }}/{{ total }})</div>
+      <span class="badge badge-{{ overall_level }} mt-2">{{ overall_label }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-7">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Subject-wise Attendance</h6>
+      {% if subject_wise %}
+      <table class="table table-sm mb-0">
+        <thead><tr><th>Subject</th><th>Present/Total</th><th>%</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for row in subject_wise %}
+          <tr>
+            <td>{{ row.subject }}</td>
+            <td>{{ row.present }}/{{ row.total }}</td>
+            <td>{{ row.percentage }}%</td>
+            <td><span class="badge badge-{{ row.level }}">{{ row.label }}</span></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% if warning %}
+      <p class="text-muted small mt-2 mb-0">Attendance below {{ warning }}% is flagged as Warning; below {{ critical }}% as Critical. This reflects the configured threshold, not an academic decision.</p>
+      {% endif %}
+      {% else %}
+      <p class="text-muted mb-0">No attendance recorded yet.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Recent Attendance</h6>
+      {% if recent %}
+      <ul class="list-unstyled mb-0 small">
+        {% for r in recent %}
+        <li class="mb-2">
+          {{ r.date }} — {{ r.subject.name }} — <span class="status-{{ r.status }}">{{ r.status|capitalize }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="text-muted mb-0">Nothing recorded yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

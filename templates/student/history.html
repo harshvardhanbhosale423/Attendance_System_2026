@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Attendance History{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">My Attendance History</h4>
+
+<form class="row g-2 mb-3" method="GET">
+  <div class="col-md-4">
+    <select name="subject_id" class="form-select">
+      <option value="">All Subjects</option>
+      {% for s in subjects %}<option value="{{ s.id }}" {% if subject_id==s.id %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="col-md-3"><input type="date" name="date" class="form-control" value="{{ date_str or '' }}"></div>
+  <div class="col-md-3">
+    <select name="status" class="form-select">
+      <option value="">Any Status</option>
+      <option value="present" {% if status=='present' %}selected{% endif %}>Present</option>
+      <option value="absent" {% if status=='absent' %}selected{% endif %}>Absent</option>
+      <option value="leave" {% if status=='leave' %}selected{% endif %}>Leave</option>
+    </select>
+  </div>
+  <div class="col-md-2"><button class="btn btn-outline-secondary w-100">Filter</button></div>
+</form>
+
+<div class="card-panel">
+  <div class="table-responsive" style="max-height:600px; overflow:auto;">
+    <table class="table table-sm">
+      <thead><tr><th>Date</th><th>Subject</th><th>Session</th><th>Status</th></tr></thead>
+      <tbody>
+      {% for r in records %}
+        <tr><td>{{ r.date }}</td><td>{{ r.subject.name }}</td><td>{{ r.session }}</td><td><span class="status-{{ r.status }}">{{ r.status|capitalize }}</span></td></tr>
+      {% else %}
+        <tr><td colspan="4" class="empty-state">No records found.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

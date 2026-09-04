@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Class Analytics{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">Class Attendance Analytics</h4>
+<p class="text-muted">Warning threshold: {{ warning }}% · Critical threshold: {{ critical }}%</p>
+
+<div class="card-panel mb-3">
+  <canvas id="classChart" height="220"></canvas>
+</div>
+
+<div class="card-panel">
+  <table class="table table-sm">
+    <thead><tr><th>Subject</th><th>Division</th><th>Present</th><th>Total</th><th>%</th></tr></thead>
+    <tbody>
+    {% for row in stats %}
+      <tr><td>{{ row.subject }}</td><td>{{ row.division }}</td><td>{{ row.present }}</td><td>{{ row.total }}</td><td>{{ row.percentage }}%</td></tr>
+    {% else %}
+      <tr><td colspan="5" class="empty-state">No assignments yet.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const stats = {{ stats|tojson }};
+new Chart(document.getElementById('classChart'), {
+  type: 'bar',
+  data: {
+    labels: stats.map(s => s.subject + ' (' + s.division + ')'),
+    datasets: [{ label: 'Attendance %', data: stats.map(s => s.percentage), backgroundColor: '#2952e3' }]
+  },
+  options: { scales: { y: { beginAtZero: true, max: 100 } } }
+});
+</script>
+{% endblock %}

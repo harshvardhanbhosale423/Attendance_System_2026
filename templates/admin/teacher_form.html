@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Add Teacher{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">Add Teacher</h4>
+<div class="card-panel" style="max-width:640px;">
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">Full Name *</label>
+      <input type="text" name="full_name" class="form-control" required>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Employee ID *</label>
+        <input type="text" name="employee_id" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Phone</label>
+        <input type="text" name="phone" class="form-control">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Username *</label>
+        <input type="text" name="username" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" class="form-control">
+      </div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Temporary Password</label>
+      <input type="text" name="password" class="form-control" placeholder="Leave blank for default: teacher123">
+    </div>
+    <button type="submit" class="btn btn-primary">Add Teacher</button>
+    <a href="{{ url_for('admin.teachers_list') }}" class="btn btn-link">Cancel</a>
+  </form>
+</div>
+{% endblock %}

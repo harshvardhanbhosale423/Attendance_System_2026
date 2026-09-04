@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Audit Log{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">Audit Log</h4>
+<div class="card-panel">
+  <div class="table-responsive" style="max-height:600px; overflow:auto;">
+    <table class="table table-sm">
+      <thead><tr><th>When</th><th>User</th><th>Action</th><th>Details</th></tr></thead>
+      <tbody>
+      {% for log in logs %}
+        <tr>
+          <td>{{ log.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+          <td>{{ log.user.username if log.user else 'system' }}</td>
+          <td>{{ log.action }}</td>
+          <td>{{ log.details or '' }}</td>
+        </tr>
+      {% else %}
+        <tr><td colspan="4" class="empty-state">No activity recorded yet.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

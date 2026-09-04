@@ -1,0 +1,299 @@
+/* =========================================================
+   College Attendance System — "Academic Ledger" visual theme
+   System fonts only (offline/LAN requirement — no external
+   font or icon CDN). Visual layer only; no class renames that
+   would require template/logic changes.
+   ========================================================= */
+
+:root {
+  --ink: #12203c;
+  --indigo: #1f3a68;
+  --indigo-deep: #0e1f3d;
+  --indigo-soft: #eef2f9;
+  --gold: #b8860b;
+  --gold-light: #e7c465;
+  --paper: #f4f5f9;
+  --card: #ffffff;
+  --card-border: #e3e6ef;
+  --ink-muted: #5b6577;
+
+  --success: #1f7a4d;
+  --success-bg: #e4f4ea;
+  --warning: #a8620a;
+  --warning-bg: #fbeecd;
+  --danger: #b3261e;
+  --danger-bg: #fbe6e4;
+
+  --font-display: Georgia, "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --radius: 10px;
+  --shadow-sm: 0 1px 2px rgba(18, 32, 60, 0.06);
+  --shadow-md: 0 8px 24px rgba(18, 32, 60, 0.10);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--paper) 0%, var(--paper) 100%),
+    repeating-linear-gradient(
+      to bottom,
+      rgba(18, 32, 60, 0.02) 0px,
+      rgba(18, 32, 60, 0.02) 1px,
+      transparent 1px,
+      transparent 34px
+    );
+  font-family: var(--font-body);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+/* ---------------------------------------------------------------- navbar */
+.app-navbar {
+  background: linear-gradient(100deg, var(--indigo-deep) 0%, var(--indigo) 62%, var(--indigo) 100%);
+  padding: 0;
+  border-bottom: 3px solid var(--gold);
+  box-shadow: var(--shadow-md);
+}
+.app-navbar .container-fluid { padding-top: .55rem; padding-bottom: .55rem; }
+
+.app-navbar .navbar-brand,
+.app-navbar .nav-link {
+  color: rgba(255,255,255,0.88) !important;
+  font-weight: 500;
+}
+.app-navbar .navbar-brand {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: #ffffff !important;
+  letter-spacing: 0.01em;
+}
+.app-navbar .nav-link {
+  font-size: 0.92rem;
+  padding-left: .85rem !important;
+  padding-right: .85rem !important;
+  border-radius: 6px;
+  transition: background-color .15s ease, color .15s ease;
+}
+.app-navbar .nav-link:hover {
+  color: #ffffff !important;
+  background-color: rgba(255,255,255,0.08);
+}
+.app-navbar .dropdown-menu {
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-md);
+  border-radius: 8px;
+  padding: .35rem;
+}
+.app-navbar .dropdown-item { border-radius: 6px; font-size: .92rem; }
+.app-navbar .dropdown-item:hover { background: var(--indigo-soft); }
+
+/* seal / crest brand mark */
+.brand-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  background: radial-gradient(circle at 32% 28%, var(--gold-light), var(--gold) 70%);
+  color: var(--indigo-deep);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .82rem;
+  box-shadow: inset 0 0 0 2px rgba(255,255,255,0.35), 0 1px 3px rgba(0,0,0,0.35);
+}
+.brand-dot::before { content: "A"; }
+
+.role-badge {
+  text-transform: uppercase;
+  font-size: 0.66rem;
+  letter-spacing: .06em;
+  font-weight: 700;
+  padding: .35em .6em;
+  border-radius: 999px;
+}
+.role-admin   { background: linear-gradient(135deg, var(--gold-light), var(--gold)); color: #3a2a00; }
+.role-teacher { background: #bfe9d3; color: #0d4a2c; }
+.role-student { background: #c9dcff; color: #17356e; }
+
+/* ---------------------------------------------------------------- cards */
+.stat-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-left: 4px solid var(--indigo);
+  border-radius: var(--radius);
+  padding: 1.15rem 1.3rem;
+  height: 100%;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow .15s ease, transform .15s ease;
+}
+.stat-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+.stat-card .stat-value {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.stat-card .stat-label {
+  color: var(--ink-muted);
+  font-size: 0.8rem;
+  letter-spacing: .02em;
+  margin-top: .2rem;
+}
+
+.card-panel {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: 1.35rem;
+  box-shadow: var(--shadow-sm);
+}
+.card-panel h6.fw-bold {
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  padding-bottom: .6rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--card-border);
+  position: relative;
+}
+.card-panel h6.fw-bold::after {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 42px; height: 2px;
+  background: var(--gold);
+}
+
+h4.fw-bold { font-family: var(--font-display); color: var(--ink); }
+
+/* ---------------------------------------------------------------- badges / status */
+.badge-normal   { background: var(--success-bg); color: var(--success); font-weight: 600; }
+.badge-warning  { background: var(--warning-bg); color: var(--warning); font-weight: 600; }
+.badge-critical { background: var(--danger-bg);  color: var(--danger);  font-weight: 600; }
+
+.status-present { color: var(--success); font-weight: 600; }
+.status-absent  { color: var(--danger);  font-weight: 600; }
+.status-leave   { color: var(--warning); font-weight: 600; }
+
+/* ---------------------------------------------------------------- tables (ledger style) */
+.table thead th, .table-attendance th {
+  text-transform: uppercase;
+  font-size: .72rem;
+  letter-spacing: .06em;
+  color: var(--ink-muted);
+  font-weight: 700;
+  border-bottom: 2px solid var(--indigo) !important;
+  background: transparent;
+}
+.table-attendance th { position: sticky; top: 0; background: #fff; z-index: 1; }
+.table td { vertical-align: middle; }
+.table-hover tbody tr:hover { background-color: var(--indigo-soft); }
+
+/* ---------------------------------------------------------------- buttons */
+.btn-primary {
+  background: linear-gradient(160deg, var(--indigo), var(--indigo-deep));
+  border: 1px solid var(--indigo-deep);
+  font-weight: 600;
+  letter-spacing: .01em;
+  box-shadow: var(--shadow-sm);
+}
+.btn-primary:hover, .btn-primary:focus {
+  background: linear-gradient(160deg, #274a83, var(--indigo-deep));
+  border-color: var(--indigo-deep);
+}
+.btn-outline-primary {
+  color: var(--indigo);
+  border-color: var(--indigo);
+}
+.btn-outline-primary:hover {
+  background: var(--indigo);
+  border-color: var(--indigo);
+}
+.btn-outline-secondary { border-color: var(--card-border); color: var(--ink-muted); }
+
+/* ---------------------------------------------------------------- login */
+.login-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255,255,255,0.06), transparent 45%),
+    linear-gradient(150deg, var(--indigo-deep) 0%, var(--indigo) 55%, #2b4b82 100%);
+  position: relative;
+}
+.login-card {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 2.4rem 2.2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 24px 60px rgba(6, 12, 28, 0.45);
+  border-top: 4px solid var(--gold);
+  position: relative;
+  z-index: 1;
+}
+.login-card h4 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+.login-card .form-label { font-size: .82rem; font-weight: 600; color: var(--ink-muted); }
+.login-card .form-control { border-radius: 8px; padding: .6rem .8rem; }
+.login-card .btn-primary { padding: .6rem; border-radius: 8px; }
+
+/* ---------------------------------------------------------------- calendar */
+.calendar-grid td {
+  height: 76px;
+  vertical-align: top;
+  padding: 5px 7px !important;
+  border-color: var(--card-border) !important;
+}
+.calendar-grid thead th {
+  background: var(--indigo-soft);
+  color: var(--indigo);
+  border-color: var(--card-border) !important;
+}
+.cal-day-num { font-family: var(--font-display); font-size: 0.85rem; color: var(--ink-muted); }
+.cal-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 3px; }
+.cal-present { background: var(--success); }
+.cal-absent  { background: var(--danger); }
+.cal-leave   { background: var(--warning); }
+.cal-mixed   { background: var(--ink-muted); }
+.table-active { background-color: var(--indigo-soft) !important; }
+
+/* ---------------------------------------------------------------- empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--ink-muted);
+}
+
+/* ---------------------------------------------------------------- misc */
+.alert { border-radius: 8px; border: 1px solid transparent; }
+.alert-danger  { background: var(--danger-bg);  color: var(--danger); }
+.alert-success { background: var(--success-bg); color: var(--success); }
+.alert-warning { background: var(--warning-bg); color: var(--warning); }
+.alert-info    { background: var(--indigo-soft); color: var(--indigo); }
+
+::selection { background: var(--gold-light); color: var(--ink); }
+
+a { color: var(--indigo); }
+a:hover { color: var(--indigo-deep); }
+
+@media (max-width: 576px) {
+  .stat-card .stat-value { font-size: 1.5rem; }
+  .table-responsive-stack th { display: none; }
+}

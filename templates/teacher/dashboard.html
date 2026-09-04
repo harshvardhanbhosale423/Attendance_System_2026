@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="fw-bold mb-0">Welcome, {{ teacher.full_name }}</h4>
+  <a href="{{ url_for('teacher.take_attendance') }}" class="btn btn-primary">Take Attendance</a>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="stat-card"><div class="stat-value">{{ completed_today }}</div><div class="stat-label">Completed Today</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card"><div class="stat-value">{{ pending_today }}</div><div class="stat-label">Pending Today</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card"><div class="stat-value">{{ total_students }}</div><div class="stat-label">Total Students</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card"><div class="stat-value">{{ assignments|length }}</div><div class="stat-label">Assigned Classes</div></div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Low-Attendance Students</h6>
+      {% if low_attendance %}
+      <table class="table table-sm mb-0">
+        <thead><tr><th>Student</th><th>%</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for row in low_attendance %}
+          <tr><td>{{ row.student.full_name }}</td><td>{{ row.percentage }}%</td><td><span class="badge badge-{{ row.level }}">{{ row.label }}</span></td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="text-muted mb-0">No low-attendance students in your classes.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">My Assigned Classes</h6>
+      <ul class="list-group list-group-flush">
+        {% for a in assignments %}
+        <li class="list-group-item px-0 d-flex justify-content-between">
+          <span>{{ a.subject.name }} — {{ a.division.class_group.name }}-{{ a.division.name }}</span>
+          <a href="{{ url_for('teacher.take_attendance', subject_id=a.subject_id, division_id=a.division_id) }}" class="small">Take &rarr;</a>
+        </li>
+        {% else %}
+        <li class="list-group-item px-0 text-muted">No classes assigned yet. Contact your admin.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

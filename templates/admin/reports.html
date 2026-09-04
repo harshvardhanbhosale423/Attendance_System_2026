@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">Reports</h4>
+<p class="text-muted">Filter, then export using real database data as CSV, Excel, or PDF.</p>
+
+<div class="card-panel" style="max-width:720px;">
+  <form method="GET" id="reportForm" class="row g-2" action="{{ url_for('reports.export_csv') }}">
+    <div class="col-md-6">
+      <label class="form-label">Division</label>
+      <select name="division_id" class="form-select">
+        <option value="">All Divisions</option>
+        {% for d in divisions %}<option value="{{ d.id }}">{{ d.class_group.name }}-{{ d.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Subject</label>
+      <select name="subject_id" class="form-select">
+        <option value="">All Subjects</option>
+        {% for s in subjects %}<option value="{{ s.id }}">{{ s.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Specific date</label>
+      <input type="date" name="date" class="form-control">
+    </div>
+    <div class="col-md-6">
+      <label class="form-label">Month (monthly report)</label>
+      <input type="month" name="month" class="form-control">
+    </div>
+    <div class="col-12 mt-3 d-flex gap-2">
+      <button type="submit" formaction="{{ url_for('reports.export_csv') }}" class="btn btn-outline-primary">Export CSV</button>
+      <button type="submit" formaction="{{ url_for('reports.export_excel') }}" class="btn btn-outline-primary">Export Excel</button>
+      <button type="submit" formaction="{{ url_for('reports.export_pdf') }}" class="btn btn-outline-primary">Export PDF</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

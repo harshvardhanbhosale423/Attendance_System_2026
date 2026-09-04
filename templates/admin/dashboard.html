@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">Admin Dashboard</h4>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-3">
+    <div class="stat-card"><div class="stat-value">{{ total_students }}</div><div class="stat-label">Active Students</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card"><div class="stat-value">{{ total_teachers }}</div><div class="stat-label">Active Teachers</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card"><div class="stat-value">{{ total_subjects }}</div><div class="stat-label">Subjects</div></div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="stat-card"><div class="stat-value">{{ total_divisions }}</div><div class="stat-label">Divisions</div></div>
+  </div>
+</div>
+
+<div class="row g-3">
+  <div class="col-md-3">
+    <div class="stat-card">
+      <div class="stat-value">{{ today_records }}</div>
+      <div class="stat-label">Attendance records marked today</div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Students Below Warning Threshold</h6>
+      {% if low_attendance %}
+        <table class="table table-sm mb-0">
+          <thead><tr><th>Student</th><th>%</th><th>Status</th></tr></thead>
+          <tbody>
+          {% for row in low_attendance %}
+            <tr>
+              <td>{{ row.student.full_name }} <span class="text-muted">({{ row.student.roll_number }})</span></td>
+              <td>{{ row.percentage }}%</td>
+              <td><span class="badge badge-{{ row.level }}">{{ row.label }}</span></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="text-muted mb-0">No students currently below the warning threshold.</p>
+      {% endif %}
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Recent Attendance Activity</h6>
+      {% if recent %}
+        <ul class="list-unstyled mb-0 small">
+        {% for r in recent %}
+          <li class="mb-2">
+            <strong>{{ r.student.full_name }}</strong> — {{ r.subject.name }}
+            <span class="status-{{ r.status }}">{{ r.status|capitalize }}</span>
+            <div class="text-muted">{{ r.date }} · {{ r.division.class_group.name }}-{{ r.division.name }}</div>
+          </li>
+        {% endfor %}
+        </ul>
+      {% else %}
+        <p class="text-muted mb-0">No attendance recorded yet.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

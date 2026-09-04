@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Assign Subjects{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-1">Assign Subjects — {{ teacher.full_name }}</h4>
+<p class="text-muted mb-4">Teachers only see classes/subjects assigned here.</p>
+
+<div class="row g-3">
+  <div class="col-md-5">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Add Assignment</h6>
+      <form method="POST">
+        <div class="mb-3">
+          <label class="form-label">Subject</label>
+          <select name="subject_id" class="form-select" required>
+            {% for s in subjects %}
+              <option value="{{ s.id }}">{{ s.name }} ({{ s.class_group.name }})</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Division</label>
+          <select name="division_id" class="form-select" required>
+            {% for d in divisions %}
+              <option value="{{ d.id }}">{{ d.class_group.name }}-{{ d.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-sm">Add</button>
+      </form>
+    </div>
+  </div>
+  <div class="col-md-7">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Current Assignments</h6>
+      <table class="table table-sm">
+        <thead><tr><th>Subject</th><th>Division</th><th></th></tr></thead>
+        <tbody>
+        {% for link in teacher.subject_links %}
+          <tr>
+            <td>{{ link.subject.name }}</td>
+            <td>{{ link.division.class_group.name }}-{{ link.division.name }}</td>
+            <td class="text-end">
+              <form method="POST" action="{{ url_for('admin.teacher_assignment_remove', link_id=link.id) }}">
+                <button class="btn btn-sm btn-outline-danger">Remove</button>
+              </form>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="3" class="text-muted">No assignments yet.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<a href="{{ url_for('admin.teachers_list') }}" class="btn btn-link mt-3">&larr; Back to teachers</a>
+{% endblock %}

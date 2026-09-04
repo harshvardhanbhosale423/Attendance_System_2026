@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">System Settings</h4>
+<div class="card-panel" style="max-width:480px;">
+  <h6 class="fw-bold mb-3">Low Attendance Thresholds</h6>
+  <form method="POST">
+    <div class="mb-3">
+      <label class="form-label">Warning threshold (%)</label>
+      <input type="number" step="0.1" name="warning_threshold" class="form-control" value="{{ warning }}" required>
+      <div class="form-text">Students below this appear as "Warning".</div>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Critical threshold (%)</label>
+      <input type="number" step="0.1" name="critical_threshold" class="form-control" value="{{ critical }}" required>
+      <div class="form-text">Students below this appear as "Critical". Must be lower than warning.</div>
+    </div>
+    <button class="btn btn-primary">Save Thresholds</button>
+  </form>
+</div>
+{% endblock %}

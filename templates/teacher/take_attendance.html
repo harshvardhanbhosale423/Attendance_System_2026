@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Take Attendance{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">Take Attendance</h4>
+
+<div class="card-panel mb-3">
+  <form method="GET" class="row g-2 align-items-end">
+    <div class="col-md-3">
+      <label class="form-label">Class / Division</label>
+      <select name="division_id" class="form-select" required>
+        <option value="">Select</option>
+        {% for a in assignments|unique(attribute='division_id') %}
+          <option value="{{ a.division_id }}" {% if division_id==a.division_id %}selected{% endif %}>{{ a.division.class_group.name }}-{{ a.division.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label">Subject</label>
+      <select name="subject_id" class="form-select" required>
+        <option value="">Select</option>
+        {% for a in assignments %}
+          <option value="{{ a.subject_id }}" {% if subject_id==a.subject_id %}selected{% endif %}>{{ a.subject.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Date</label>
+      <input type="date" name="date" class="form-control" value="{{ date_str }}" required>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label">Session</label>
+      <input type="text" name="session" class="form-control" value="{{ session_label }}" placeholder="1">
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-outline-secondary w-100">Load Class</button>
+    </div>
+  </form>
+</div>
+
+{% if valid %}
+<form method="POST">
+  <input type="hidden" name="subject_id" value="{{ subject_id }}">
+  <input type="hidden" name="division_id" value="{{ division_id }}">
+  <input type="hidden" name="date" value="{{ date_str }}">
+  <input type="hidden" name="session" value="{{ session_label }}">
+
+  <div class="d-flex gap-2 mb-3">
+    <button type="button" id="markAllPresent" class="btn btn-sm btn-outline-success">Mark All Present</button>
+    <button type="button" id="markAllAbsent" class="btn btn-sm btn-outline-danger">Mark All Absent</button>
+  </div>
+
+  <div class="card-panel">
+    <div class="table-responsive">
+      <table class="table table-sm align-middle">
+        <thead><tr><th>Roll No</th><th>Student</th><th>Present</th><th>Absent</th><th>Leave</th></tr></thead>
+        <tbody>
+        {% for s in students %}
+          {% set current = existing.get(s.id, 'present') %}
+          <tr>
+            <td>{{ s.roll_number }}</td>
+            <td>{{ s.full_name }}</td>
+            <td class="text-center"><input type="radio" data-role="status" name="status_{{ s.id }}" value="present" {% if current=='present' %}checked{% endif %}></td>
+            <td class="text-center"><input type="radio" data-role="status" name="status_{{ s.id }}" value="absent" {% if current=='absent' %}checked{% endif %}></td>
+            <td class="text-center"><input type="radio" data-role="status" name="status_{{ s.id }}" value="leave" {% if current=='leave' %}checked{% endif %}></td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="empty-state">No active students in this division.</td></tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary mt-3">Save Attendance</button>
+</form>
+{% elif subject_id or division_id %}
+<div class="alert alert-danger">You are not assigned to this subject/division combination.</div>
+{% else %}
+<div class="empty-state">Select a class, subject, and date above to begin.</div>
+{% endif %}
+{% endblock %}

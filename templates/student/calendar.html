@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Attendance Calendar{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="fw-bold mb-0">Attendance Calendar — {{ month_name }} {{ year }}</h4>
+  <div>
+    <a href="{{ url_for('student.calendar_view', year=prev_year, month=prev_month) }}" class="btn btn-sm btn-outline-secondary">&larr; Prev</a>
+    <a href="{{ url_for('student.calendar_view') }}" class="btn btn-sm btn-outline-secondary">Current</a>
+    <a href="{{ url_for('student.calendar_view', year=next_year, month=next_month) }}" class="btn btn-sm btn-outline-secondary">Next &rarr;</a>
+  </div>
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-4"><div class="stat-card"><div class="stat-value status-present">{{ present_count }}</div><div class="stat-label">Present Days</div></div></div>
+  <div class="col-4"><div class="stat-card"><div class="stat-value status-absent">{{ absent_count }}</div><div class="stat-label">Absent Days</div></div></div>
+  <div class="col-4"><div class="stat-card"><div class="stat-value status-leave">{{ leave_count }}</div><div class="stat-label">Leave Days</div></div></div>
+</div>
+
+<div class="card-panel">
+  <table class="table table-bordered calendar-grid text-center mb-0">
+    <thead>
+      <tr><th>Sun</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th></tr>
+    </thead>
+    <tbody>
+    {% for week in weeks %}
+      <tr>
+      {% for day in week %}
+        {% if day == 0 %}
+          <td></td>
+        {% else %}
+          {% set summary = day_summary.get(day) %}
+          <td class="{% if today.year==year and today.month==month and today.day==day %}table-active{% endif %}"
+              {% if summary %}data-bs-toggle="tooltip" title="Click for details"{% endif %}>
+            <div class="cal-day-num">{{ day }}</div>
+            {% if summary %}
+              <span class="cal-dot cal-{{ summary }}"></span>
+              <span class="small">{{ summary|capitalize }}</span>
+              <div class="mt-1">
+                {% for rec in by_day.get(day, []) %}
+                  <div class="small text-muted">{{ rec.subject.name }}: <span class="status-{{ rec.status }}">{{ rec.status|capitalize }}</span></div>
+                {% endfor %}
+              </div>
+            {% else %}
+              <div class="small text-muted">—</div>
+            {% endif %}
+          </td>
+        {% endif %}
+      {% endfor %}
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+<p class="text-muted small mt-2">Legend: <span class="cal-dot cal-present"></span> Present &nbsp; <span class="cal-dot cal-absent"></span> Absent &nbsp; <span class="cal-dot cal-leave"></span> Leave &nbsp; <span class="cal-dot cal-mixed"></span> Mixed sessions &nbsp; “—” No attendance recorded</p>
+{% endblock %}

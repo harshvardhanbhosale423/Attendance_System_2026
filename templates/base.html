@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}{{ app_name }}{% endblock %}</title>
+<link href="{{ url_for('static', filename='vendor/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static', filename='css/style.css', v=8) }}" rel="stylesheet">
+</head>
+<body>
+{% if current_user.is_authenticated %}
+<nav class="navbar navbar-expand-lg app-navbar">
+  <div class="container-fluid px-3">
+    <a class="navbar-brand fw-semibold" href="/">
+      <span class="brand-dot"></span> {{ app_name }}
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav me-auto">
+        {% if current_user.role == 'admin' %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.students_list') }}">Students</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.teachers_list') }}">Teachers</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.academics') }}">Academics</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.attendance_view') }}">Attendance</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.analytics') }}">Analytics</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.reports') }}">Reports</a></li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">More</a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="{{ url_for('admin.settings') }}">Settings</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('admin.backup') }}">Backup</a></li>
+              <li><a class="dropdown-item" href="{{ url_for('admin.audit_log') }}">Audit Log</a></li>
+            </ul>
+          </li>
+        {% elif current_user.role == 'teacher' %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('teacher.dashboard') }}">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('teacher.take_attendance') }}">Take Attendance</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('teacher.history') }}">History</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('teacher.analytics') }}">Analytics</a></li>
+        {% elif current_user.role == 'student' %}
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('student.dashboard') }}">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('student.calendar_view') }}">Calendar</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('student.history') }}">History</a></li>
+        {% endif %}
+      </ul>
+      <ul class="navbar-nav">
+        <li class="nav-item d-flex align-items-center me-3">
+          <span class="badge role-badge role-{{ current_user.role }}">{{ current_user.role|capitalize }}</span>
+          <span class="ms-2 text-white-50">{{ current_user.display_name() }}</span>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+{% endif %}
+
+<main class="container-fluid px-3 px-md-4 py-4">
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ 'danger' if category == 'danger' else category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<script src="{{ url_for('static', filename='vendor/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

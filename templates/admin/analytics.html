@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Attendance Analytics{% endblock %}
+{% block content %}
+<h4 class="fw-bold mb-3">Attendance Analytics</h4>
+<p class="text-muted">Warning threshold: {{ warning }}% · Critical threshold: {{ critical }}%</p>
+
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Subject-wise Attendance</h6>
+      <canvas id="subjectChart" height="220"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card-panel">
+      <h6 class="fw-bold mb-3">Division-wise Attendance</h6>
+      <canvas id="divisionChart" height="220"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="card-panel mt-3">
+  <h6 class="fw-bold mb-3">Subject Detail</h6>
+  <table class="table table-sm">
+    <thead><tr><th>Subject</th><th>Present</th><th>Total</th><th>%</th></tr></thead>
+    <tbody>
+    {% for row in subject_stats %}
+      <tr><td>{{ row.subject }}</td><td>{{ row.present }}</td><td>{{ row.total }}</td><td>{{ row.percentage }}%</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const subjectData = {{ subject_stats|tojson }};
+const divisionData = {{ division_stats|tojson }};
+
+new Chart(document.getElementById('subjectChart'), {
+  type: 'bar',
+  data: {
+    labels: subjectData.map(d => d.subject),
+    datasets: [{ label: 'Attendance %', data: subjectData.map(d => d.percentage), backgroundColor: '#2952e3' }]
+  },
+  options: { scales: { y: { beginAtZero: true, max: 100 } } }
+});
+
+new Chart(document.getElementById('divisionChart'), {
+  type: 'bar',
+  data: {
+    labels: divisionData.map(d => d.division),
+    datasets: [{ label: 'Attendance %', data: divisionData.map(d => d.percentage), backgroundColor: '#16a34a' }]
+  },
+  options: { scales: { y: { beginAtZero: true, max: 100 } } }
+});
+</script>
+{% endblock %}

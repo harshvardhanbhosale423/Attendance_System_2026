@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Error {{ code }}{% endblock %}
+{% block content %}
+<div class="empty-state">
+  <h1 class="display-4 fw-bold">{{ code }}</h1>
+  <p class="lead">{{ message }}</p>
+  <a href="{{ url_for('auth.login') }}" class="btn btn-primary">Go to Login</a>
+</div>
+{% endblock %}

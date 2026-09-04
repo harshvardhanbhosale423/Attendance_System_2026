@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Teachers{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="fw-bold mb-0">Teachers</h4>
+  <a href="{{ url_for('admin.teacher_add') }}" class="btn btn-primary btn-sm">+ Add Teacher</a>
+</div>
+<div class="card-panel">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead><tr><th>Employee ID</th><th>Name</th><th>Phone</th><th>Status</th><th></th></tr></thead>
+      <tbody>
+      {% for t in teachers %}
+        <tr>
+          <td>{{ t.employee_id }}</td>
+          <td>{{ t.full_name }}</td>
+          <td>{{ t.phone or '-' }}</td>
+          <td>
+            {% if t.is_active_staff %}<span class="badge badge-normal">Active</span>
+            {% else %}<span class="badge badge-critical">Deactivated</span>{% endif %}
+          </td>
+          <td class="text-end">
+            <a href="{{ url_for('admin.teacher_assign', teacher_id=t.id) }}" class="btn btn-sm btn-outline-primary">Assign Subjects</a>
+            <form method="POST" action="{{ url_for('admin.teacher_toggle', teacher_id=t.id) }}" class="d-inline">
+              <button class="btn btn-sm btn-outline-danger">{{ 'Deactivate' if t.is_active_staff else 'Activate' }}</button>
+            </form>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="5" class="empty-state">No teachers found.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
