@@ -1,5 +1,6 @@
 cancel_queued_tasks = true
 cancel_running_tasks = true
+release_notes_template = "main"
 
 connectivity_policy {
     allow_deployments_to_no_targets = true
